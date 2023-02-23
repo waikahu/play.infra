@@ -9,7 +9,7 @@ $gh_pat="[PAT HERE]"
 dotnet nuget add source --username USERNAME --password $gh_pat --store-password-in-clear-text --name github "https://nuget.pkg.github.com/$owner/index.json"
 ```
 
-## Creating the Azure resource group
+## Creating the Azure resource group ($appname is unique)
 ```powershell
 $appname="playeconomy"
 az group create --name $appname --location eastus
@@ -25,4 +25,10 @@ az cosmosdb create --name $dbname --resource-group $appname --kind MongoDB --ena
 ```powershell
 $sbname="wbplayeconomy"
 az servicebus namespace create --name $sbname --resource-group $appname --sku Standard
+```
+
+## Creating the Azure Container Registry
+```powershell
+$crname="wbplayeconomy"
+az acr create --name $crname --resource-group $appname --sku Basic
 ```
