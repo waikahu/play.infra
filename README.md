@@ -20,3 +20,9 @@ az group create --name $appname --location eastus
 $dbname="wbplayeconomy"
 az cosmosdb create --name $dbname --resource-group $appname --kind MongoDB --enable-free-tier
 ```
+
+## Creating the Azure Service Bus namespace
+```powershell
+$sbname="wbplayeconomy"
+az servicebus namespace create --name $sbname --resource-group $appname --sku Standard
+```
