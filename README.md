@@ -32,3 +32,14 @@ az servicebus namespace create --name $sbname --resource-group $appname --sku St
 $crname="wbplayeconomy"
 az acr create --name $crname --resource-group $appname --sku Basic
 ```
+
+## Creating the Azure Kubernetes Service cluster
+```powershell
+az extension add --name aks-preview
+
+az feature register --namespace "Microsoft.ContainerService" --name "EnablePodIdentityPreview"
+az feature register --namespace "Microsoft.ContainerService" --name "EnableWorkloadIdentityPreview"
+
+az aks create -n $appname -g $appname --node-vm-size Standard_B2s --node-count 2 --attach-acr $crname --enable-oidc-issuer --enable-workload-identity
+az aks get-credentials --resource-group $appname --name $appname
+```
