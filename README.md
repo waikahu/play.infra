@@ -43,3 +43,10 @@ az feature register --namespace "Microsoft.ContainerService" --name "EnableWorkl
 az aks create -n $appname -g $appname --node-vm-size Standard_B2s --node-count 2 --attach-acr $crname --enable-oidc-issuer --enable-workload-identity
 az aks get-credentials --resource-group $appname --name $appname
 ```
+
+## Creating the Azure Key Vault
+```powershell
+# kvname need to be changed to appname
+$kvname="wbplayeconomy"
+az keyvault create -n $kvname -g $appname
+```
