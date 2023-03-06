@@ -11,26 +11,23 @@ dotnet nuget add source --username USERNAME --password $gh_pat --store-password-
 
 ## Creating the Azure resource group ($appname is unique)
 ```powershell
-$appname="playeconomy"
+$appname="wbplayeconomy"
 az group create --name $appname --location eastus
 ```
 
 ## Creating the Azure CosmosDB account
 ```powershell
-$dbname="wbplayeconomy"
-az cosmosdb create --name $dbname --resource-group $appname --kind MongoDB --enable-free-tier
+az cosmosdb create --name $appname --resource-group $appname --kind MongoDB --enable-free-tier
 ```
 
 ## Creating the Azure Service Bus namespace
 ```powershell
-$sbname="wbplayeconomy"
-az servicebus namespace create --name $sbname --resource-group $appname --sku Standard
+az servicebus namespace create --name $appname --resource-group $appname --sku Standard
 ```
 
 ## Creating the Azure Container Registry
 ```powershell
-$crname="wbplayeconomy"
-az acr create --name $crname --resource-group $appname --sku Basic
+az acr create --name $appname --resource-group $appname --sku Basic
 ```
 
 ## Creating the Azure Kubernetes Service cluster
@@ -40,13 +37,25 @@ az extension add --name aks-preview
 az feature register --namespace "Microsoft.ContainerService" --name "EnablePodIdentityPreview"
 az feature register --namespace "Microsoft.ContainerService" --name "EnableWorkloadIdentityPreview"
 
-az aks create -n $appname -g $appname --node-vm-size Standard_B2s --node-count 2 --attach-acr $crname --enable-oidc-issuer --enable-workload-identity
+az aks create -n $appname -g $appname --node-vm-size Standard_B2s --node-count 2 --attach-acr $appname --enable-oidc-issuer --enable-workload-identity --generate-ssh-keys
 az aks get-credentials --resource-group $appname --name $appname
 ```
 
 ## Creating the Azure Key Vault
 ```powershell
-# kvname need to be changed to appname
-$kvname="wbplayeconomy"
-az keyvault create -n $kvname -g $appname
+az keyvault create -n $appname -g $appname --location eastus
+```
+
+## Installing Emissary-Ingress
+```powershell
+helm repo add datawire https://app.getambassador.io
+helm repo update
+
+kubectl apply -f https://app.getambassador.io/yaml/emissary/3.5.1/emissary-crds.yaml
+kubectl wait --timeout=90s --for=condition=available deployment emissary-apiext -n emissary-system
+
+$namespace="emissary"
+helm install emissary-ingress datawire/emissary-ingress --set service.annotations."service\.beta\.kubernetes\.io\azure-dns-label-name"=$appname -n $namespace --create-namespace
+kubectl rollout status deployment/emissary-ingress -n $namespace -w
+
 ```
