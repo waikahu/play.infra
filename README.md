@@ -55,7 +55,18 @@ kubectl apply -f https://app.getambassador.io/yaml/emissary/3.5.1/emissary-crds.
 kubectl wait --timeout=90s --for=condition=available deployment emissary-apiext -n emissary-system
 
 $namespace="emissary"
-helm install emissary-ingress datawire/emissary-ingress --set service.annotations."service\.beta\.kubernetes\.io\azure-dns-label-name"=$appname -n $namespace --create-namespace
+$appname="wbplayeconomy"
+helm install emissary-ingress datawire/emissary-ingress --set service.annotations."service\.beta\.kubernetes\.io/azure-dns-label-name"=$appname -n $namespace --create-namespace
 kubectl rollout status deployment/emissary-ingress -n $namespace -w
 
+kubectl get svc --namespace emissary emissary-ingress
+
+# See all detailed events or errors
+kubectl get events --all-namespaces -o json
+```
+
+## Configuring Emissary-Ingress routing
+```powershell
+kubectl apply -f .\emissary-ingress\listener.yaml -n $namespace
+kubectl apply -f .\emissary-ingress\mappings.yaml -n $namespace
 ```
