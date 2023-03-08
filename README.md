@@ -67,6 +67,7 @@ kubectl get events --all-namespaces -o json
 
 ## Configuring Emissary-Ingress routing
 ```powershell
+$namespace="emissary"
 kubectl apply -f .\emissary-ingress\listener.yaml -n $namespace
 kubectl apply -f .\emissary-ingress\mappings.yaml -n $namespace
 ```
