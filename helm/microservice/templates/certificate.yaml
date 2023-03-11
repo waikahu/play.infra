@@ -1,4 +1,4 @@
-{{- if .Values.certificate}}
+{{- if .Values.certificate }}
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
@@ -10,4 +10,4 @@ spec:
     kind: ClusterIssuer
   dnsNames:
     - {{.Values.certificate.hostname}}
-{{- end}}
+{{- end }}
