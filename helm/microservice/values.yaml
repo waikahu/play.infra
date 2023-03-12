@@ -10,10 +10,16 @@ resources:
 container:
   liveness:
     path: /health/live
+    failureThreshold: 3
     initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
   readiness:
     path: /health/ready
+    failureThreshold: 3
     initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
 
 service:
   type: ClusterIP
