@@ -28,20 +28,12 @@ spec:
             httpGet:
               path: {{.Values.container.liveness.path}}
               port: {{.Values.container.port}}
-            failureThreshold: {{.Values.container.liveness.failureThreshold}}
             initialDelaySeconds: {{.Values.container.liveness.initialDelaySeconds}}
-            periodSeconds: {{.Values.container.liveness.periodSeconds}}
-            successThreshold: {{.Values.container.liveness.successThreshold}}
-            timeoutSeconds: {{.Values.container.liveness.timeoutSeconds}}
           readinessProbe:
             httpGet:
               path: {{.Values.container.readiness.path}}
               port: {{.Values.container.port}}
-            failureThreshold: {{.Values.container.liveness.failureThreshold}}
-            initialDelaySeconds: {{.Values.container.liveness.initialDelaySeconds}}
-            periodSeconds: {{.Values.container.liveness.periodSeconds}}
-            successThreshold: {{.Values.container.liveness.successThreshold}}
-            timeoutSeconds: {{.Values.container.liveness.timeoutSeconds}}
+            initialDelaySeconds: {{.Values.container.readiness.initialDelaySeconds}}
           volumeMounts:
             {{- toYaml .Values.container.volumeMounts | nindent 12 }}
       volumes:
